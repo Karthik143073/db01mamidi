@@ -1,0 +1,17 @@
+extends layout
+
+block content
+  h1= title
+  - values = [{brandName: 'Cipla', price: 29, manufacturedYear: 2020}, {brandName: 'DrReddy', price: 39, manufacturedYear: 2019},{brandName: 'Natco', price: 49, manufacturedYear: 2010} ]
+  div(class="container-fluid")
+      each item,index in values
+        div(class="row" onclick=`buy(${index})`)
+          div(class="col-sm-2")  #{item.brandName}
+          div(class="col-sm-2")  #{item.manufacturedYear}
+          div(class="col-sm-2")  #{item.price}
+  script.
+
+     function buy(itemNo)
+     {
+       alert(`You purchased Item ${itemNo+1}`)
+     }
