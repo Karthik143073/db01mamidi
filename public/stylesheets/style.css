@@ -6,3 +6,52 @@ body {
 a {
   color: #00B7FF;
 }
+
+.costumeAttr {
+  background-color: rgb(114, 57, 51);
+  width: 120px;
+  margin: 6px;
+  text-align: center;
+  color: white;
+  padding: 6px;
+  border-radius: 4px;
+  font-weight:bold;
+
+}
+
+.nameone {
+  width: 150px;
+  margin: 6px;
+  text-align: center;
+  padding: 6px;
+  border-radius: 5px;
+  font-weight:normal;
+
+}
+
+#titlestyle{
+  color: #e71a25;
+  font-weight: 500;
+  font-family:'Times New Roman', Times, serif;
+  text-decoration:solid;
+}
+
+.variety{
+  margin-right: 4px;
+  margin-bottom: 0;
+  padding: 7px;
+  justify-content:center;
+  font-weight: bold;
+  border-bottom: 3px solid rgb(232, 223, 215);
+  border-left: 3px solid  rgb(46, 53, 38);
+  background-color: rgb(147, 135, 174);
+  border-radius: 3px;
+}
+.stylesheetnew{
+    border-top: 3px solid rgb(235, 177, 19);
+    width: 60%;
+}
+.variety:hover{
+  background-color: rgb(213, 218, 168);
+  color: rgb(190, 21, 21);
+}
