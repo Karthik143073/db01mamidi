@@ -6,7 +6,6 @@ var logger = require('morgan');
 var passport = require('passport');
 var LocalStrategy = require('passport-local').Strategy;
 
-
 passport.use(new LocalStrategy(
   function(username, password, done) {
     Account.findOne({ username: username }, function (err, user) {
@@ -23,7 +22,7 @@ passport.use(new LocalStrategy(
 
 
 var passport = require('passport'); 
-var LocalStrategy = require('passport-local').Strategy; 
+var LocalStrategy = require('passport-local').Strategy;
 
 const connectionString = process.env.MONGO_CON 
 mongoose = require('mongoose'); 
@@ -36,20 +35,34 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:')); 
 db.once("open", function(){ 
  console.log("Connection to DB succeeded")
- recreateDB();
+recreateDB();
 }); 
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
-var textbookRouter = require('./routes/textbook');
+var inhalerRouter = require('./routes/inhaler');
 var addmodsRouter = require('./routes/addmods');
 var selectorRouter = require('./routes/selector');
 const Costume = require("./models/costume");
 const resoureRouter = require('./routes/resource');
 var costumeRouter = require('./routes/costume');
-var Account =require('./models/account'); 
-
+var Account =require('./models/account');
 var app = express();
+
+app.use(require('express-session')({
+  secret: 'keyboard cat',
+  resave: false,
+  saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+
+//model account
+var Account =require('./models/account');
+passport.use(new LocalStrategy(Account.authenticate()));
+passport.serializeUser(Account.serializeUser());
+passport.deserializeUser(Account.deserializeUser());
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -63,7 +76,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/textbook', textbookRouter);
+app.use('/inhaler', inhalerRouter);
 app.use('/addmods', addmodsRouter);
 app.use('/selector', selectorRouter);
 app.use('/resource', resoureRouter);
@@ -90,8 +103,8 @@ async function recreateDB(){
   await Costume.deleteMany(); 
  
   let instance1 = new Costume({costume_type:"ghost",  size:'large', cost:25.4}); 
-  let instance2 = new Costume({costume_type:"ironman",  size:'Medium', cost:36.4}); 
-  let instance3 = new Costume({costume_type:"spidey",  size:'small', cost:42.6}); 
+  let instance2 = new Costume({costume_type:"Baghamati",  size:'Medium', cost:36.4}); 
+  let instance3 = new Costume({costume_type:"Blackwood",  size:'small', cost:42.6}); 
 
   instance1.save( function(err,doc) { 
       if(err) return console.error(err); 
@@ -107,19 +120,6 @@ async function recreateDB(){
   });
   // let reseed = true; 
   // if (reseed) { recreateDB();}  
-
-  app.use(require('express-session')({
-    secret: 'keyboard cat',
-    resave: false,
-    saveUninitialized: false
-  }));
-  app.use(passport.initialize());
-  app.use(passport.session());
-
-  //model account
-var Account =require('./models/account');
-passport.use(new LocalStrategy(Account.authenticate()));
-passport.serializeUser(Account.serializeUser());
-passport.deserializeUser(Account.deserializeUser());
 } 
+
 module.exports = app;
