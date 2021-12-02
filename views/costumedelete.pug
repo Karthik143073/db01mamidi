@@ -1,53 +1,36 @@
-extends layout 
- 
-block content 
-  h1= title 
- 
-  if (toShow == null) 
-    h2 No instance to delete 
-  else 
-    - let costumeid = toShow._id 
-    - let costume_type = toShow.costume_type 
-    - let costumecost = toShow.cost 
-    - let costumesize = toShow.size 
-    - let actionid = "/resource/costumes/" + costumeid 
-    script let actionid = "#{actionid}" 
+block content
+    h1= title
+    - var list = results 
     div 
-      div.row 
-        div(class='costumeAttr mr-3') Costume ID is: 
-        div #{costumeid} 
-      div.row 
-        div(class='costumeAttr mr-3') Costume Type is: 
-        div #{costume_type} 
-      div.row 
-        div(class='costumeAttr mr-3') Costume Size is: 
-        div #{costumesize} 
-      div.row 
-        div(class='costumeAttr mr-3') Costume Cost is: 
-        div #{costumecost} 
+        a(class="btn btn-primary", style="margin-right:5px", href=`/costume/create`) Add New Costume
+
+    table(class="table table-stripped table-bordered")
+        thead 
+            tr 
+                td Costume Type
+                td Size 
+                td Cost
+                td Action
+        tbody 
+            each item in list 
+             -let destination = `dispatch(\"/costumes/update?id=${item._id}\")` 
+             -let dst=`disp(\"/costumes/delete?id=${item._id}\")`
+                tr
+                    td #{item.costume_type}
+                    td #{item.size}
+                    td #{item.cost}
+                    td 
+                        div(class="d-flex ")
+                            a(class="btn btn-primary", style="margin-right:5px", href=` /costume/detail?id=${item.id}`) Details
+                            a(class="btn btn-secondary", style="margin-right:5px", href=` /costume/update?id=${item.id}`) Edit 
+                            button.btn( class="btn-primary ml-1", onclick= dst) Delete
+                            button.btn( class="btn-primary ml-1", onclick= destination) Update    
+
+    script. 
+     function dispatch(path){ 
+      window.location.href=path 
+     } 
+     function disp(path){ 
+      window.location.href=path 
+     } 
  
-    button(class="btn btn-danger m-2" onclick="deleteOnid()") Delete 
-    button(class="btn btn-secondary m-2" onclick="cancel()") Cancel 
- 
-  script. 
-    function cancel() { 
-      // Go back to the home page for the costume collection 
-      window.location.href='/costumes' 
-    } 
-  script. 
-    function deleteOnid() { 
-      console.log("starting delete") 
-      // delete first 
-      fetch(actionid, { 
-        method: 'DELETE'      // Don't need a body for the delete 
-      }).then((resp) => { 
-        return resp.json(); // or resp.text() or whatever the server sends 
-      }).then((body) => { 
-        alert("Delete succeded") 
-        window.location.href='/costumes' 
-        // TODO handle body 
-      }).catch((error) => { 
-        // TODO handle error 
-        alert("Delete failed " + error ) 
-      }); 
-    } 
